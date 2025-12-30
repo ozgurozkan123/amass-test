@@ -1,24 +1,22 @@
 FROM python:3.11-slim
 
-ARG AMASS_VERSION=5.0.1
+ARG AMASS_VERSION=4.2.0
 
-# Install system dependencies, Go toolchain, and libpostal build requirements for Amass
+# Install system dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
       ca-certificates \
       curl \
-      git \
-      build-essential \
-      golang \
-      pkg-config \
-      libpostal-dev && \
+      unzip \
+      git && \
     rm -rf /var/lib/apt/lists/*
 
-# Build Amass from source
-RUN git clone --branch v${AMASS_VERSION} --depth 1 https://github.com/owasp-amass/amass.git /tmp/amass && \
-    cd /tmp/amass && \
-    go build -o /usr/local/bin/amass ./cmd/amass && \
-    rm -rf /tmp/amass
+# Install Amass binary (prebuilt)
+RUN curl -sSfL "https://github.com/owasp-amass/amass/releases/download/v${AMASS_VERSION}/amass_Linux_amd64.zip" -o /tmp/amass.zip && \
+    unzip /tmp/amass.zip -d /tmp/amass && \
+    mv /tmp/amass/amass_Linux_amd64/amass /usr/local/bin/amass && \
+    chmod +x /usr/local/bin/amass && \
+    rm -rf /tmp/amass /tmp/amass.zip
 
 WORKDIR /app
 
