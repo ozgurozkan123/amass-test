@@ -12,9 +12,9 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Amass binary
-RUN curl -sSL "https://github.com/owasp-amass/amass/releases/download/v${AMASS_VERSION}/amass_Linux_amd64.zip" -o /tmp/amass.zip && \
+RUN curl -sSL "https://github.com/owasp-amass/amass/releases/download/v${AMASS_VERSION}/amass_linux_amd64.zip" -o /tmp/amass.zip && \
     unzip /tmp/amass.zip -d /tmp/amass && \
-    mv /tmp/amass/amass_Linux_amd64/amass /usr/local/bin/amass && \
+    mv /tmp/amass/amass_linux_amd64/amass /usr/local/bin/amass && \
     chmod +x /usr/local/bin/amass && \
     rm -rf /tmp/amass /tmp/amass.zip
 
