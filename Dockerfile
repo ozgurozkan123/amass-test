@@ -2,14 +2,16 @@ FROM python:3.11-slim
 
 ARG AMASS_VERSION=5.0.1
 
-# Install system dependencies and Go toolchain for building Amass
+# Install system dependencies, Go toolchain, and libpostal build requirements for Amass
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
       ca-certificates \
       curl \
       git \
       build-essential \
-      golang && \
+      golang \
+      pkg-config \
+      libpostal-dev && \
     rm -rf /var/lib/apt/lists/*
 
 # Build Amass from source
