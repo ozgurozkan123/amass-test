@@ -1,13 +1,22 @@
 FROM python:3.11-slim
 
-# Install system dependencies and Amass CLI
+ARG AMASS_VERSION=5.0.1
+
+# Install system dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
       ca-certificates \
       curl \
-      git \
-      amass && \
+      unzip \
+      git && \
     rm -rf /var/lib/apt/lists/*
+
+# Install Amass binary
+RUN curl -sSL "https://github.com/owasp-amass/amass/releases/download/v${AMASS_VERSION}/amass_Linux_amd64.zip" -o /tmp/amass.zip && \
+    unzip /tmp/amass.zip -d /tmp/amass && \
+    mv /tmp/amass/amass_Linux_amd64/amass /usr/local/bin/amass && \
+    chmod +x /usr/local/bin/amass && \
+    rm -rf /tmp/amass /tmp/amass.zip
 
 WORKDIR /app
 
